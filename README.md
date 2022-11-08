@@ -87,9 +87,11 @@ docker compose up --build -d
 docker exec backend composer migrate-and-seed
 
 docker run --network=backend_app-network \
-  --rm skandyla/wrk -t6 -c10 -d15s -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjIsInJvbGUiOiJ1c2VyIiwiYWN0aW9uIjoiYXV0aDphY2Nlc3MiLCJleHAiOjE3Njc0MTE2NzF9.XAEu1kgCGEDpt0FoJbf7VoLThwCjhzHFBpTvy8wiH3A' http://webserver/api/account
+  --rm skandyla/wrk -t6 -c10 -d15s -H 'Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsInJvbGUiOiJ1c2VyIiwiYWN0aW9uIjoiYXV0aDphY2Nlc3MiLCJleHAiOjE3Njc4OTI1ODB9.WeC3Ync76gDcKjcDirNBT0fkwjm_wchoV1uYxgrnwUU' http://webserver/api/account
 
 ```
+
+- Bearer token can be different
 
 ---
 
