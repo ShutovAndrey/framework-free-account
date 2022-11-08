@@ -103,4 +103,4 @@ php bin/console payment n
 
 ```
 
-where n - number of payments you wish to create
+where n - number of payments you wish to process
