@@ -1,0 +1,60 @@
+{
+  "name": "shutov/gift-shop",
+  "autoload": {
+      "psr-4": {
+          "App\\": "src/"
+      }
+  },
+   "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "authors": [
+      {
+          "name": "ShutovAndrey",
+          "email": "shutovandrey@yandex.ru"
+      }
+  ],
+  "require": {
+    "php": "^8.0",
+    "firebase/php-jwt": "^6.0",
+    "guzzlehttp/guzzle": "^7.5",
+    "illuminate/database": "^8.83",
+    "laminas/laminas-diactoros": "^2.16",
+    "laminas/laminas-httphandlerrunner": "^2.1",
+    "middlewares/fast-route": "^2.0",
+    "middlewares/request-handler": "^2.0",
+    "monolog/monolog": "^2.8",
+    "nikic/fast-route": "^1.3",
+    "php-di/php-di": "^6.4",
+    "relay/relay": "^2.1",
+    "vlucas/phpdotenv": "^5.2",
+    "vlucas/valitron": "^1.4"
+  },
+    "require-dev": {
+      "phpunit/phpunit": " ^9.5",
+      "phpcompatibility/php-compatibility": "^9.3",
+      "slevomat/coding-standard": "^6.3",
+      "squizlabs/php_codesniffer": "3.*"
+    },
+    "config": {
+      "process-timeout": 0,
+      "sort-packages": true,
+      "disable-tls": false,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+    },
+  "scripts": {
+      "start": "php -S 0.0.0.0:80 -t public",
+      "up": "composer update && composer dump-autoload",
+      "test-coverage": "composer migrate-and-seed test && XDEBUG_MODE=coverage phpunit --coverage-text",
+      "test": "composer migrate-and-seed test && phpunit",
+      "migrate-and-seed": [
+        "App\\DB\\MigrationAction::up"
+    ],
+    "cs-check": "vendor/bin/phpcs --colors -p",
+    "cs-fix": "vendor/bin/phpcbf --colors -p; if [ $? -eq 1 ]; then exit 0; fi"
+    }
+}

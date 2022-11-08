@@ -1,0 +1,14 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Component\Console\Application;
+use App\Actions\MassPaymentAction;
+use App\Services\PaymentService;
+
+
+require __DIR__ . '/../vendor/autoload.php';
+$container = require __DIR__ . '/../app/container.php';
+
+$app = new Application();
+$app->add(new MassPaymentAction($container->get(PaymentService::class)));
+$app->run();

@@ -1,0 +1,81 @@
+version: "2.0"
+services:
+
+  #PHP Service
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cloudsigma.com/php
+    container_name: backend
+    restart: unless-stopped
+    tty: true
+    environment:
+      JWT_LIFETIME: ${JWT_LIFETIME}
+      JWT_KEY: ${JWT_KEY}
+      BANK_API_KEY: ${BANK_API_KEY}
+      DB_HOST: gift-mysql
+      DB_PORT: 
+      DB_NAME: ${DB_NAME}
+      DB_USER: ${DB_USER}
+      DB_PASS: ${DB_PASS}
+    working_dir: /var/www/html/
+    volumes:
+      - ./:/var/www/html/
+    networks:
+      - app-network
+    depends_on:
+      - gift-mysql
+    links:
+      - gift-mysql
+
+  frontend:
+    stdin_open: true
+    container_name: frontend
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    volumes:
+      - /app/node_modules
+      - ../frontend:/var/www/html/
+    networks:
+      - app-network
+
+  #Nginx Service
+  webserver:
+    depends_on:
+      - backend
+      - frontend
+      - gift-mysql
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+    networks:
+      - app-network
+
+  gift-mysql:
+    image: mysql
+    container_name: gift-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_PASSWORD: ${DB_PASS}
+    ports:
+      - ${DB_PORT}:3306
+    volumes:
+      - gift-mysql_data:/var/lib/mysql
+    networks:
+      - app-network
+
+
+volumes:
+  gift-mysql_data:
+
+networks:
+  app-network:
+    driver: bridge

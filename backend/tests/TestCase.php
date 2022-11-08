@@ -1,0 +1,92 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Tests;
+
+use App\Middlewares\AuthMiddleware;
+use Middlewares\FastRoute;
+use Middlewares\RequestHandler;
+use Relay\Relay;
+use App\Services\JwtService;
+use Laminas\Diactoros\StreamFactory;
+use Laminas\Diactoros\ServerRequest as Request;
+use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
+
+abstract class TestCase extends PHPUnit_TestCase
+{
+    protected $app;
+    protected $container;
+
+    public function setUp(): void
+    {
+        require __DIR__ . '/../vendor/autoload.php';
+
+        $dotenv = \Dotenv\Dotenv::createUnsafeImmutable(dirname(__DIR__));
+        $dotenv->load();
+
+        $containerBuilder = new \DI\ContainerBuilder();
+        $containerBuilder->useAutowiring(false);
+        $containerBuilder->useAnnotations(false);
+
+        // Set up settings
+        $settings = require __DIR__ . '/../app/settings.php';
+        $settings($containerBuilder);
+
+        // Set up dependencies
+        $dependencies = require __DIR__ . '/../app/dependencies.php';
+        $dependencies($containerBuilder, true);
+
+        $this->container = $containerBuilder->build();
+        $routes = require __DIR__ . '/../app/routes.php';
+
+        $middlewareQueue[] = new FastRoute($routes);
+        $middlewareQueue[] = new RequestHandler($this->container);
+        $this->app = new Relay($middlewareQueue);
+    }
+
+    protected function createRequest(
+        string $method,
+        string $path,
+        array $headers = [],
+        array $body = []
+    ): Request {
+        $path = '/api' . $path;
+        $serverParams = ['REQUEST_URI' => $path, 'REQUEST_METHOD' => $method];
+        $handle = fopen('php://temp', 'w+');
+        $stream = (new StreamFactory())->createStreamFromResource($handle);
+        $headers += [
+            'HTTP_ACCEPT' => 'application/json',
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Methods' => 'GET,POST,PUT,DELETE,OPTIONS',
+            'Access-Control-Allow-Headers' => 'Content-Type,Authorization,X-Requested-With,Accept,Origin',
+        ];
+
+        $request = new Request(
+            $serverParams,
+            [],
+            $path,
+            $method,
+            $stream,
+            $headers,
+            [],
+            [],
+            $body
+        );
+        $auth = new AuthMiddleware($this->container->get(JwtService::class));
+        $request =  $auth($request);
+
+        return $request;
+    }
+
+    protected function getToken(int $id): string
+    {
+        $payload = [
+            'uid' => $id,
+            'role' => 'user',
+            'action' => 'auth:access',
+        ];
+        $jwt = $this->container->get(JwtService::class);
+        return $jwt->createJwt($payload);
+    }
+}
