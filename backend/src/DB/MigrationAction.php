@@ -45,6 +45,7 @@ class MigrationAction
             $table->integer('good_id')->unsigned();
             $table->foreign('good_id')->references('id')->on('goods');
             $table->integer('quantity');
+            $table->boolean('is_gift')->default(true);
             $table->timestamps();
         });
 
@@ -135,7 +136,6 @@ class MigrationAction
             'driver'    => 'mysql',
             'host'      => getenv('DB_HOST'),
             'port'      => getenv('DB_PORT'),
-            'database'  => getenv('DB_NAME'),
             'database'  => $test ? getenv('DB_TEST_NAME') : getenv('DB_NAME'),
             'username'  => getenv('DB_USER'),
             'password'  => getenv('DB_PASS'),

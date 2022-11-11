@@ -5,6 +5,7 @@ namespace tests\Actions;
 use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
 
+
 final class TokenCreateActionTest extends TestCase
 {
     use AppTestTrait;

@@ -35,7 +35,7 @@ export default {
     giftEntity() {
       return {
         1: `${this.gift.amount}$ cache`,
-        2: `${this.gift.points} loyalty points points`,
+        2: `${this.gift.points} loyalty points`,
         3: `${this.gift.good}`
       }[this.gift.type]
     }

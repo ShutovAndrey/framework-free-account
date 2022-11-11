@@ -5,10 +5,10 @@ namespace tests\Traits;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
 
+
 /**
  * App Test Trait.
  */
-
 trait AppTestTrait
 {
     /**

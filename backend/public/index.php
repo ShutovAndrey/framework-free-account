@@ -3,14 +3,12 @@
 declare(strict_types=1);
 
 use Laminas\Diactoros\ServerRequestFactory;
-use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 use Middlewares\RequestHandler;
 use Relay\Relay;
 use Middlewares\FastRoute;
 use App\Middlewares\AuthMiddleware;
-use App\Middlewares\CORSMiddleware;
 use App\Services\JwtService;
-
+use App\Emitter\Emitter;
 
 require __DIR__ . '/../vendor/autoload.php';
 $container = require __DIR__ . '/../app/container.php';
@@ -23,7 +21,6 @@ set_exception_handler(function (\Throwable $exception) {
 
 $request = ServerRequestFactory::fromGlobals();
 
-$middlewareQueue[] = new CORSMiddleware();
 $middlewareQueue[] = new AuthMiddleware($container->get(JwtService::class));
 $middlewareQueue[] = new FastRoute($routes);
 $middlewareQueue[] = new RequestHandler($container);
@@ -31,5 +28,5 @@ $requestHandler = new Relay($middlewareQueue);
 
 $response = $requestHandler->handle($request);
 
-$emitter = new SapiEmitter();
+$emitter = new Emitter();
 return $emitter->emit($response);

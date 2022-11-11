@@ -40,6 +40,7 @@ abstract class TestCase extends PHPUnit_TestCase
         $this->container = $containerBuilder->build();
         $routes = require __DIR__ . '/../app/routes.php';
 
+        $middlewareQueue[] = new AuthMiddleware($this->container->get(JwtService::class));
         $middlewareQueue[] = new FastRoute($routes);
         $middlewareQueue[] = new RequestHandler($this->container);
         $this->app = new Relay($middlewareQueue);
@@ -73,8 +74,6 @@ abstract class TestCase extends PHPUnit_TestCase
             [],
             $body
         );
-        $auth = new AuthMiddleware($this->container->get(JwtService::class));
-        $request =  $auth($request);
 
         return $request;
     }
