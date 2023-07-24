@@ -6,7 +6,6 @@ use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
 use App\Services\JwtService;
 
-
 final class JwtServiceTest extends TestCase
 {
     use AppTestTrait;

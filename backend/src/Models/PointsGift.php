@@ -7,7 +7,6 @@ namespace App\Models;
 use App\Enums\GiftType;
 use App\Interfaces\GiftInterface;
 
-
 class PointsGift extends Gift implements GiftInterface
 {
     public function getAttributes(): array

@@ -17,7 +17,9 @@ class GiftFactory
     {
         $giftTypes = [GoodsGift::class, CacheGift::class, PointsGift::class];
         foreach ($giftTypes as $index => $type) {
-            if (!$type::isAvailable()) unset($giftTypes[$index]);
+            if (!$type::isAvailable()) {
+                unset($giftTypes[$index]);
+            }
         }
         return new $giftTypes[rand(0, count($giftTypes) - 1)]();
     }

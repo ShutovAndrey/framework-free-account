@@ -7,10 +7,8 @@ namespace App\Emitter;
 use Psr\Http\Message\ResponseInterface;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
 
-
 class Emitter extends SapiEmitter
 {
-
     public function emit(ResponseInterface $response): bool
     {
         $origin = $_SERVER['HTTP_ORIGIN'] ?? '';

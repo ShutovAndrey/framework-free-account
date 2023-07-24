@@ -7,10 +7,8 @@ namespace App\Models;
 use App\Enums\GiftType;
 use App\Interfaces\GiftInterface;
 
-
 class GoodsGift extends Gift implements GiftInterface
 {
-
     public function getAttributes(): array
     {
         $good = GoodsStore::where('quantity', '>', '0')
