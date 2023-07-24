@@ -14,26 +14,12 @@ use Monolog\Handler\StreamHandler;
 
 class LoggerFactory
 {
-    /**
-     * @var string
-     */
-    private $path;
+    private string $path;
 
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
-    /**
-     * @var int
-     */
-    private $level;
+    private int $level;
 
-    /**
-     * The constructor.
-     *
-     * @param array $settings The settings
-     */
     public function __construct(array $settings)
     {
         $this->path = (string) $settings['path'];
@@ -54,8 +40,6 @@ class LoggerFactory
             $this->path,
             $this->level
         ));
-
-        $this->handler = [];
 
         return $logger;
     }

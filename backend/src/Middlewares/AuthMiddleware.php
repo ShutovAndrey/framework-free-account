@@ -9,16 +9,8 @@ use App\Services\JwtService;
 
 class AuthMiddleware
 {
-    /**
-     * @var JwtService
-     */
-    private $jwt;
+    private JwtService $jwt;
 
-    /**
-     * The constructor.
-     *
-     * @param JwtService $jwt The JWT auth
-     */
     public function __construct(JwtService $jwt)
     {
         $this->jwt = $jwt;

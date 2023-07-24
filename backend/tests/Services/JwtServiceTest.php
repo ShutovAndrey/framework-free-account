@@ -1,7 +1,9 @@
 <?php
 
-namespace tests\Services;
+namespace Tests\Services;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
 use App\Services\JwtService;
@@ -11,9 +13,8 @@ final class JwtServiceTest extends TestCase
     use AppTestTrait;
 
     /**
-     * Test.
-     *
-     * @return void
+     * @throws DependencyException
+     * @throws NotFoundException
      */
     public function testCreateJwt(): void
     {

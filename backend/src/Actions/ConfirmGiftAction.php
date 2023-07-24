@@ -18,15 +18,14 @@ use App\Enums\{GiftType, DeliveryStatus};
 
 class ConfirmGiftAction extends Action
 {
-    protected $response;
-    protected $db;
-    protected $payment;
-    protected $user;
+    protected Response $response;
+    protected Capsule $db;
+    protected PaymentService$payment;
+    protected User $user;
 
     public function __construct(Response $response, Capsule $db, PaymentService $payment)
     {
-        $this->response = $response;
-        $this->db = $db;
+        parent::__construct($response, $db);
         $this->payment = $payment;
     }
 
@@ -63,7 +62,6 @@ class ConfirmGiftAction extends Action
 
     protected function processPayment(Gift $gift): void
     {
-
         $this->payment->create(new PaymentData(
             $this->user->id,
             $gift->id,

@@ -12,13 +12,13 @@ use App\Models\PaymentData;
 
 class MassPaymentAction extends Command
 {
-    private $payment;
+    private PaymentService $payment;
 
     public function __construct(PaymentService $payment)
     {
+        parent::__construct();
         $this->payment = $payment;
 
-        parent::__construct();
     }
 
     protected function configure()
@@ -28,7 +28,7 @@ class MassPaymentAction extends Command
             ->addArgument('quantity', InputArgument::REQUIRED, 'Pass the users quantity.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $usersGifts = Gift::where('confirmed', false)
             ->leftJoin('users', 'users.id', '=', 'users_gifts.user_id')

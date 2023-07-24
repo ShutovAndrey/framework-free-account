@@ -5,7 +5,7 @@ declare(strict_types=1);
 use DI\ContainerBuilder;
 use Monolog\Logger;
 
-return function (ContainerBuilder $containerBuilder) {
+return static fn (ContainerBuilder $containerBuilder) =>
     $containerBuilder->addDefinitions([
         'settings' => [
             'logger' => [
@@ -48,4 +48,3 @@ return function (ContainerBuilder $containerBuilder) {
             ],
         ],
     ]);
-};

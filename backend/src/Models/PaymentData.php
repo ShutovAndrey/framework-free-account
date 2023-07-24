@@ -6,10 +6,10 @@ namespace App\Models;
 
 class PaymentData
 {
-    public $userId;
-    public $giftId;
-    public $amount;
-    public $bankAccout;
+    public int $userId;
+    public int $giftId;
+    public int $amount;
+    public string $bankAccout;
 
     public function __construct(int $userId, int $giftId, int $amount, string $bankAccout)
     {

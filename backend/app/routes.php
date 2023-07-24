@@ -6,7 +6,6 @@ use function FastRoute\simpleDispatcher;
 use FastRoute\RouteCollector;
 use Laminas\Diactoros\Response;
 
-
 return simpleDispatcher(function (RouteCollector $r) {
     $r->addGroup('/api', function (RouteCollector $r) {
         //CORS

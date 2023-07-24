@@ -15,8 +15,8 @@ use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
 
 abstract class TestCase extends PHPUnit_TestCase
 {
-    protected $app;
-    protected $container;
+    protected Relay $app;
+    protected \DI\Container $container;
 
     public function setUp(): void
     {
@@ -63,7 +63,7 @@ abstract class TestCase extends PHPUnit_TestCase
             'Access-Control-Allow-Headers' => 'Content-Type,Authorization,X-Requested-With,Accept,Origin',
         ];
 
-        $request = new Request(
+        return new Request(
             $serverParams,
             [],
             $path,
@@ -74,8 +74,6 @@ abstract class TestCase extends PHPUnit_TestCase
             [],
             $body
         );
-
-        return $request;
     }
 
     protected function getToken(int $id): string

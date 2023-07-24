@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Actions;
+namespace Tests\Actions;
 
 use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
@@ -14,11 +14,6 @@ final class RefuseGiftActionTest extends TestCase
 {
     use AppTestTrait;
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testConvertGiftAction(): void
     {
         $userId = User::inRandomOrder()->first('id')->id;

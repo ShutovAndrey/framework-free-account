@@ -31,7 +31,8 @@
     "relay/relay": "^2.1",
     "vlucas/phpdotenv": "^5.2",
     "vlucas/valitron": "^1.4",
-    "friendsofphp/php-cs-fixer": "^3.2"
+    "friendsofphp/php-cs-fixer": "^3.2",
+    "ext-pdo": "*"
   },
     "require-dev": {
       "phpunit/phpunit": " ^9.5",

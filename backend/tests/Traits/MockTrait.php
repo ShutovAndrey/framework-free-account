@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Traits;
+namespace Tests\Traits;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\MockObject\MockObject;

@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Actions;
+namespace Tests\Actions;
 
 use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
@@ -19,12 +19,6 @@ final class ConfirmGiftActionTest extends TestCase
 {
     use AppTestTrait;
 
-    /**
-     * Test.
-     *
-     *
-     * @return void
-     */
     public function testConfirmGiftGoodAction(): void
     {
         $userId = User::inRandomOrder()->first('id')->id;
@@ -65,12 +59,6 @@ final class ConfirmGiftActionTest extends TestCase
         $this->assertTrue($deliveryExists);
     }
 
-    /**
-     * Test.
-     *
-     *
-     * @return void
-     */
     public function testConfirmGiftCacheAction(): void
     {
         $userId = User::inRandomOrder()->first('id')->id;
@@ -109,12 +97,6 @@ final class ConfirmGiftActionTest extends TestCase
         $this->assertTrue($transactionExists);
     }
 
-    /**
-     * Test.
-     *
-     *
-     * @return void
-     */
     public function testConfirmGiftPointsAction(): void
     {
         $user = User::inRandomOrder()->first('id');

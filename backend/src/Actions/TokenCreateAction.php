@@ -11,28 +11,24 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 class TokenCreateAction extends Action
 {
-    protected $db;
+    protected Capsule $db;
 
-    /**
-     * @var JwtService
-     */
-    protected $jwt;
+    protected JwtService $jwt;
 
-    /**
-     * @var Response
-     */
-    protected $response;
+    protected Response $response;
 
     public function __construct(
         Response $response,
         Capsule $db,
         JwtService $jwt
     ) {
-        $this->response = $response;
+        parent::__construct($response, $db);
         $this->jwt = $jwt;
-        $this->db = $db;
     }
 
+    /**
+     * @throws \JsonException
+     */
     protected function action(): Response
     {
         $validator = new \Valitron\Validator($this->getBody(), ['email', 'password']);

@@ -20,7 +20,7 @@ class User extends Model
             'id' => $this->id,
             'email' => $this->email,
             'name' => $this->name,
-            'points' => $this->points,
+            'points' => $this->points
         ];
     }
 }

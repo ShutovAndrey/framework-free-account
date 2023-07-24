@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Actions;
+namespace Tests\Actions;
 
 use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
@@ -14,11 +14,6 @@ final class ConvertGiftActionTest extends TestCase
 {
     use AppTestTrait;
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testConvertGiftAction(): void
     {
         $user = new User();

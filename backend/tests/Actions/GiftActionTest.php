@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Actions;
+namespace Tests\Actions;
 
 use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
@@ -15,11 +15,6 @@ final class GiftActionTest extends TestCase
 {
     use AppTestTrait;
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGiftAction(): void
     {
         $user = new User();
@@ -55,11 +50,6 @@ final class GiftActionTest extends TestCase
         }
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGiftFailAction(): void
     {
         $user = new User();
@@ -87,11 +77,6 @@ final class GiftActionTest extends TestCase
         $response = $this->app->handle($request);
     }
 
-    /**
-     * Test.
-     *
-     * @return void
-     */
     public function testGiftNotConfirmedAction(): void
     {
         $user = new User();

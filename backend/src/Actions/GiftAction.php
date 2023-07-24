@@ -15,7 +15,7 @@ class GiftAction extends Action
     {
         if ($gift = Gift::firstWhere([['user_id', $this->uid]])) {
             if ($gift->confirmed) {
-                throw new \App\Exception\ValidationException(null, 'User allready have a gift');
+                throw new \App\Exception\ValidationException(null, 'User already have a gift');
             } else {
                 return $this->respond($gift->toArray());
             }

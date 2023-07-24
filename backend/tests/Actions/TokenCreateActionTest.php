@@ -1,7 +1,8 @@
 <?php
 
-namespace tests\Actions;
+namespace Tests\Actions;
 
+use App\Exception\UnauthenticatedException;
 use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
 
@@ -9,13 +10,6 @@ final class TokenCreateActionTest extends TestCase
 {
     use AppTestTrait;
 
-    /**
-     * Test.
-     *
-     * @dataProvider provideTokenCreateAction
-     *
-     * @return void
-     */
     public function testTokenCreateAction(array $expected): void
     {
         $body = [
@@ -37,11 +31,9 @@ final class TokenCreateActionTest extends TestCase
         $this->assertJsonData($expected, $response);
     }
 
-    /**
-     * @expectedException UnauthenticatedException
-     */
     public function testTokenCreateFailAction(): void
     {
+        $this->expectException(UnauthenticatedException::class);
         $body = [
             'email' => 'user1@user.com',
             'password' => 'wrongPass',

@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Traits;
+namespace Tests\Traits;
 
 use JsonException;
 use Psr\Http\Message\ResponseInterface;

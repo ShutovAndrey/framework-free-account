@@ -15,13 +15,10 @@ use App\Factory\LoggerFactory;
 
 class PaymentService
 {
-    /**
-     * @var Client
-     */
-    private $http;
-    private $config;
-    protected $db;
-    protected $logger;
+    private Client $http;
+    private array $config;
+    protected Capsule $db;
+    protected \Psr\Log\LoggerInterface $logger;
 
     public function __construct(
         Capsule $db,

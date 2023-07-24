@@ -1,6 +1,6 @@
 <?php
 
-namespace tests\Actions;
+namespace Tests\Actions;
 
 use Tests\Traits\AppTestTrait;
 use Tests\Traits\MockTrait;
@@ -11,7 +11,7 @@ final class AccountActionTest extends TestCase
     use AppTestTrait;
     use MockTrait;
 
-    protected $token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsInJvbGUiOiJ1c2VyIiwiYWN0aW9uIjoiYXV0aDphY2Nlc3MiLCJleHAiOjE3NjgxNTExODB9.kT-GS9Jc-mCWXn_RW78Eda2oIUWN-K5KBzTgGkq3oZw';
+    protected string $token = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsInJvbGUiOiJ1c2VyIiwiYWN0aW9uIjoiYXV0aDphY2Nlc3MiLCJleHAiOjE3NjgxNTExODB9.kT-GS9Jc-mCWXn_RW78Eda2oIUWN-K5KBzTgGkq3oZw';
 
     /**
      * Test.
@@ -21,6 +21,7 @@ final class AccountActionTest extends TestCase
      * @param array $expected The expected result
      *
      * @return void
+     * @throws \JsonException
      */
     public function testAccountAction(array $expected): void
     {

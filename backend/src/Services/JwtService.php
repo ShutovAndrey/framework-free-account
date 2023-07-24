@@ -10,7 +10,6 @@ use DomainException;
 
 class JwtService
 {
-    private int $expiresOn;
     private int $lifetime;
     private string $key;
 
@@ -26,15 +25,15 @@ class JwtService
             $this->lifetime = $lifetime;
         }
 
-        $this->expiresOn = time() + $this->lifetime;
-        $payload += ['exp' => $this->expiresOn];
+        $expiresOn = time() + $this->lifetime;
+        $payload += ['exp' => $expiresOn];
 
         return JWT::encode($payload, $this->key, 'HS256');
     }
 
     public function getClaim(string $name, $default = null)
     {
-        return isset($this->_tokenDecoded[$name]) ? $this->_tokenDecoded[$name] : $default;
+        return $this->_tokenDecoded[$name] ?? $default;
     }
 
     public function validateToken(string $accessToken): bool
