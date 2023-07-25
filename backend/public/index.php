@@ -15,9 +15,9 @@ $container = require __DIR__ . '/../app/container.php';
 $routes = require __DIR__ . '/../app/routes.php';
 
 // Set up exception handler
-//set_exception_handler(function (\Throwable $exception) {
-//    header("HTTP/1.1 {$exception->getCode()} {$exception->getMessage()}");
-//});
+set_exception_handler(function (\Throwable $exception) {
+    header("HTTP/1.1 {$exception->getCode()} {$exception->getMessage()}");
+});
 
 $request = ServerRequestFactory::fromGlobals();
 
