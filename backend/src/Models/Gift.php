@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Enums\GiftType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Enums\GiftType;
 
 class Gift extends Model
 {
@@ -30,10 +30,10 @@ class Gift extends Model
             'type' => $this->type,
         ];
 
-        return $data += match (GiftType::from($this->type)) {
-            GiftType::CACHE =>  ['amount' => $this->amount],
-            GiftType::POINTS =>  ['points' => $this->points],
-            GiftType::GOOD =>  ['good' => Good::whereId($this->good_id)->first('name')->name],
+        return $data + match (GiftType::from($this->type)) {
+            GiftType::CACHE => ['amount' => $this->amount],
+            GiftType::POINTS => ['points' => $this->points],
+            GiftType::GOOD => ['good' => Good::whereId($this->good_id)->first('name')->name],
         };
     }
 }

@@ -5,24 +5,25 @@ declare(strict_types=1);
 namespace Tests;
 
 use App\Middlewares\AuthMiddleware;
+use App\Services\JwtService;
+use Laminas\Diactoros\ServerRequest as Request;
+use Laminas\Diactoros\StreamFactory;
 use Middlewares\FastRoute;
 use Middlewares\RequestHandler;
+use PHPUnit\Framework\TestCase as PHPUnitTestCase;
 use Relay\Relay;
-use App\Services\JwtService;
-use Laminas\Diactoros\StreamFactory;
-use Laminas\Diactoros\ServerRequest as Request;
-use PHPUnit\Framework\TestCase as PHPUnit_TestCase;
 
-abstract class TestCase extends PHPUnit_TestCase
+abstract class TestCase extends PHPUnitTestCase
 {
     protected Relay $app;
+
     protected \DI\Container $container;
 
     public function setUp(): void
     {
         require __DIR__ . '/../vendor/autoload.php';
 
-        $dotenv = \Dotenv\Dotenv::createUnsafeImmutable(dirname(__DIR__));
+        $dotenv = \Dotenv\Dotenv::createUnsafeImmutable(\dirname(__DIR__));
         $dotenv->load();
 
         $containerBuilder = new \DI\ContainerBuilder();
@@ -54,7 +55,7 @@ abstract class TestCase extends PHPUnit_TestCase
     ): Request {
         $path = '/api' . $path;
         $serverParams = ['REQUEST_URI' => $path, 'REQUEST_METHOD' => $method];
-        $handle = fopen('php://temp', 'w+');
+        $handle = \fopen('php://temp', 'w+');
         $stream = (new StreamFactory())->createStreamFromResource($handle);
         $headers += [
             'HTTP_ACCEPT' => 'application/json',
@@ -84,6 +85,7 @@ abstract class TestCase extends PHPUnit_TestCase
             'action' => 'auth:access',
         ];
         $jwt = $this->container->get(JwtService::class);
+
         return $jwt->createJwt($payload);
     }
 }

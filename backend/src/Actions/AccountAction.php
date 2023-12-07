@@ -12,6 +12,7 @@ class AccountAction extends Action
     protected function action(): Response
     {
         $user = User::firstWhere('id', $this->uid);
+
         return $this->respond($user->toArray());
     }
 }

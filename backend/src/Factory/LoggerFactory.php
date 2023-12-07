@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Factory;
 
+use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
 use Psr\Log\LoggerInterface;
-use Monolog\Handler\StreamHandler;
 
 /**
  * Factory.
  */
-
 class LoggerFactory
 {
     private string $path;

@@ -2,13 +2,13 @@
 
 namespace App\Actions;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Input\InputArgument;
-use App\Services\PaymentService;
 use App\Models\Gift;
 use App\Models\PaymentData;
+use App\Services\PaymentService;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class MassPaymentAction extends Command
 {
@@ -25,7 +25,8 @@ class MassPaymentAction extends Command
     {
         $this->setName('payment')
             ->setDescription('Mass payment for users!')
-            ->addArgument('quantity', InputArgument::REQUIRED, 'Pass the users quantity.');
+            ->addArgument('quantity', InputArgument::REQUIRED, 'Pass the users quantity.')
+        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -34,7 +35,8 @@ class MassPaymentAction extends Command
             ->leftJoin('users', 'users.id', '=', 'users_gifts.user_id')
             ->addSelect(['users_gifts.id as gift_id', 'amount', 'users.id as user_id', 'bank_account'])
             ->take($input->getArgument('quantity'))
-            ->get();
+            ->get()
+        ;
 
         foreach ($usersGifts as $gift) {
             $this->payment->create(new PaymentData(
@@ -47,6 +49,7 @@ class MassPaymentAction extends Command
             Gift::firstWhere('id', $gift->gift_id)->update(['confirmed' => true]);
         }
         $output->writeln('Ok');
+
         return 1;
     }
 }

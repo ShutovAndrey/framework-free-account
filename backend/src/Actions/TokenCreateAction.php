@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Actions;
 
 use App\Models\User;
-use Psr\Http\Message\ResponseInterface as Response;
 use App\Services\JwtService;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class TokenCreateAction extends Action
 {
@@ -41,13 +41,13 @@ class TokenCreateAction extends Action
             throw new \App\Exception\ValidationException($validator->errors());
         }
 
-        $user = User::firstWhere('email', mb_strtolower(trim($this->input('email'))));
+        $user = User::firstWhere('email', \mb_strtolower(\trim($this->input('email'))));
 
         if (empty($user)) {
             throw new \App\Exception\UnauthenticatedException();
         }
 
-        if (!password_verify((string) $this->input('password'), $user->password)) {
+        if (!\password_verify((string) $this->input('password'), $user->password)) {
             throw new \App\Exception\UnauthenticatedException();
         }
 

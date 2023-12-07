@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Emitter;
 
-use Psr\Http\Message\ResponseInterface;
 use Laminas\HttpHandlerRunner\Emitter\SapiEmitter;
+use Psr\Http\Message\ResponseInterface;
 
 class Emitter extends SapiEmitter
 {
@@ -20,10 +20,11 @@ class Emitter extends SapiEmitter
             ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
             ->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
             ->withAddedHeader('Cache-Control', 'post-check=0, pre-check=0')
-            ->withHeader('Pragma', 'no-cache');
+            ->withHeader('Pragma', 'no-cache')
+        ;
 
-        if (ob_get_contents()) {
-            ob_clean();
+        if (\ob_get_contents()) {
+            \ob_clean();
         }
 
         return parent::emit($response);

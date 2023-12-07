@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Middlewares;
 
-use Psr\Http\Message\ServerRequestInterface;
 use App\Services\JwtService;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AuthMiddleware
 {
@@ -20,7 +20,7 @@ class AuthMiddleware
     {
 
         if ($this->needTokenCheck($request)) {
-            $token = explode(' ', (string) $request->getHeaderLine('Authorization'))[1] ?? '';
+            $token = \explode(' ', (string) $request->getHeaderLine('Authorization'))[1] ?? '';
 
             if ($token && $this->jwt->validateToken($token)) {
                 $request = $request->withAttribute('uid', (int) $this->jwt->getClaim('uid'));
@@ -34,7 +34,7 @@ class AuthMiddleware
 
     protected function needTokenCheck(ServerRequestInterface $request): bool
     {
-        return $request->getServerParams()['REQUEST_URI'] !== '/api/auth' &&
-            $request->getServerParams()['REQUEST_METHOD'] !== 'OPTIONS';
+        return '/api/auth' !== $request->getServerParams()['REQUEST_URI']
+            && 'OPTIONS' !== $request->getServerParams()['REQUEST_METHOD'];
     }
 }

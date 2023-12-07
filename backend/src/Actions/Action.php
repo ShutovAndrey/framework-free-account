@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
+use Illuminate\Database\Capsule\Manager as Capsule;
 use Psr\Http\Message\ResponseInterface as Response;
 use PSR\Http\Message\ServerRequestInterface as Request;
-use Illuminate\Database\Capsule\Manager as Capsule;
 
 abstract class Action
 {
@@ -50,10 +50,10 @@ abstract class Action
             return $this->body;
         }
 
-        if (!$input = file_get_contents('php://input')) {
+        if (!$input = \file_get_contents('php://input')) {
             return $this->getFormData();
         }
-        $input = json_decode($input, true, 512, JSON_THROW_ON_ERROR);
+        $input = \json_decode($input, true, 512, JSON_THROW_ON_ERROR);
 
         return $this->body = $input;
     }
@@ -68,15 +68,16 @@ abstract class Action
         return $this->request->getAttribute($name, $default);
     }
 
-    protected function respond(array|int $payload = [], int $status = 200): Response
+    protected function respond(array | int $payload = [], int $status = 200): Response
     {
         if ($payload) {
-            $json = json_encode($payload);
+            $json = \json_encode($payload);
             $this->response->getBody()->write($json);
         }
 
         return $this->response
             ->withHeader('Content-Type', 'application/json')
-            ->withStatus($status);
+            ->withStatus($status)
+        ;
     }
 }

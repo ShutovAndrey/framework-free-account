@@ -2,13 +2,11 @@
 
 namespace Tests\Actions;
 
-use Tests\Traits\AppTestTrait;
+use App\Models\Gift;
+use App\Models\Good;
+use App\Models\User;
 use Tests\TestCase;
-use App\Models\{
-    Gift,
-    User,
-    Good
-};
+use Tests\Traits\AppTestTrait;
 
 final class RefuseGiftActionTest extends TestCase
 {
@@ -34,8 +32,8 @@ final class RefuseGiftActionTest extends TestCase
 
         $oldGift = Gift::whereId($gift->id)->first();
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertNotNull($createdGift);
-        $this->assertNull($oldGift);
+        self::assertSame(200, $response->getStatusCode());
+        self::assertNotNull($createdGift);
+        self::assertNull($oldGift);
     }
 }

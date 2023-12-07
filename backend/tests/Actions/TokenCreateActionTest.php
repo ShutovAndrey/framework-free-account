@@ -3,14 +3,14 @@
 namespace Tests\Actions;
 
 use App\Exception\UnauthenticatedException;
-use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
+use Tests\Traits\AppTestTrait;
 
 final class TokenCreateActionTest extends TestCase
 {
     use AppTestTrait;
 
-    public function testTokenCreateAction(array $expected): void
+    public function testTokenCreateAction(): void
     {
         $body = [
             'email' => 'user1@user.com',
@@ -25,9 +25,12 @@ final class TokenCreateActionTest extends TestCase
         );
 
         $response = $this->app->handle($request);
-        $expected['access_token'] = $this->getToken(1);
+        $expected = [
+            'access_token' => $this->getToken(1),
+            'token_type' => 'Bearer',
+        ];
 
-        $this->assertSame(201, $response->getStatusCode());
+        self::assertSame(201, $response->getStatusCode());
         $this->assertJsonData($expected, $response);
     }
 

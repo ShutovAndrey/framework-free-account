@@ -2,14 +2,12 @@
 
 namespace Tests\Actions;
 
-use Tests\Traits\AppTestTrait;
-use Tests\TestCase;
 use App\Enums\GiftType;
-use App\Models\{
-    Gift,
-    User,
-    Settings
-};
+use App\Models\Gift;
+use App\Models\Settings;
+use App\Models\User;
+use Tests\TestCase;
+use Tests\Traits\AppTestTrait;
 
 final class GiftActionTest extends TestCase
 {
@@ -22,7 +20,7 @@ final class GiftActionTest extends TestCase
         $user->email = 'test@test.test';
         $user->address = 'test str';
         $user->bank_account = '123456';
-        $user->password = password_hash('test', PASSWORD_BCRYPT);
+        $user->password = \password_hash('test', PASSWORD_BCRYPT);
         $user->save();
 
         $userId = $user->id;
@@ -32,21 +30,20 @@ final class GiftActionTest extends TestCase
         $request = $this->createRequest('GET', '/gift', ['Authorization' => "Bearer $token"]);
 
         $response = $this->app->handle($request);
-        $actual = (string)$response->getBody();
-        $gift = (array)json_decode($actual, true, 512, JSON_THROW_ON_ERROR);
+        $actual = (string) $response->getBody();
+        $gift = (array) \json_decode($actual, true, 512, JSON_THROW_ON_ERROR);
 
-
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertArrayHasKey('type', $gift);
-        $this->assertCount(3, $gift);
-        $this->assertContains($gift['type'], array_column(GiftType::cases(), 'value'));
-        if ($gift['type'] == GiftType::CACHE) {
+        self::assertSame(200, $response->getStatusCode());
+        self::assertArrayHasKey('type', $gift);
+        self::assertCount(3, $gift);
+        self::assertContains($gift['type'], \array_column(GiftType::cases(), 'value'));
+        if (GiftType::CACHE == $gift['type']) {
             $max = Settings::first('cache_max')->cache_max;
-            $this->assertLessThan($max, $gift['amount']);
+            self::assertLessThan($max, $gift['amount']);
         }
-        if ($gift['type'] == GiftType::POINTS) {
+        if (GiftType::POINTS == $gift['type']) {
             $max = Settings::first('points_max')->points_max;
-            $this->assertLessThan($max, $gift['points']);
+            self::assertLessThan($max, $gift['points']);
         }
     }
 
@@ -57,7 +54,7 @@ final class GiftActionTest extends TestCase
         $user->email = 'test1@test.test';
         $user->address = 'test1 str';
         $user->bank_account = '1234567';
-        $user->password = password_hash('test1', PASSWORD_BCRYPT);
+        $user->password = \password_hash('test1', PASSWORD_BCRYPT);
         $user->save();
 
         $userId = $user->id;
@@ -84,7 +81,7 @@ final class GiftActionTest extends TestCase
         $user->email = 'test2@test.test';
         $user->address = 'test2 str';
         $user->bank_account = '1234567';
-        $user->password = password_hash('test2', PASSWORD_BCRYPT);
+        $user->password = \password_hash('test2', PASSWORD_BCRYPT);
         $user->save();
 
         $userId = $user->id;
@@ -99,11 +96,11 @@ final class GiftActionTest extends TestCase
 
         $request = $this->createRequest('GET', '/gift', ['Authorization' => "Bearer $token"]);
         $response = $this->app->handle($request);
-        $actual = (string)$response->getBody();
-        $giftFromResponse = (array)json_decode($actual, true, 512, JSON_THROW_ON_ERROR);
+        $actual = (string) $response->getBody();
+        $giftFromResponse = (array) \json_decode($actual, true, 512, JSON_THROW_ON_ERROR);
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame($gift->type, $giftFromResponse['type']);
-        $this->assertSame($gift->amount, $giftFromResponse['amount']);
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame($gift->type, $giftFromResponse['type']);
+        self::assertSame($gift->amount, $giftFromResponse['amount']);
     }
 }

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use App\Models\{Gift, User};
 use App\Enums\GiftType;
+use App\Models\Gift;
+use App\Models\User;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class ConvertGiftAction extends Action
 {
@@ -24,7 +25,7 @@ class ConvertGiftAction extends Action
             throw new \App\Exception\UnauthenticatedException();
         }
         $user = User::firstWhere('id', $this->uid);
-        $points = round($gift->amount * $user->rate);
+        $points = \round($gift->amount * $user->rate);
 
         $gift->delete();
 

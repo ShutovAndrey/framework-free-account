@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace App\Exception;
 
-use RuntimeException;
-use Throwable;
-
-final class ValidationException extends RuntimeException
+final class ValidationException extends \RuntimeException
 {
     /**
-     * @var array|string|null
+     * @var null|array|string
      */
     private $errors;
 
@@ -18,7 +15,7 @@ final class ValidationException extends RuntimeException
         $errors = null,
         string $message = 'Please fix validation errors',
         int $code = 422,
-        Throwable $previous = null
+        \Throwable $previous = null
     ) {
         parent::__construct($message, $code, $previous);
 
@@ -26,7 +23,7 @@ final class ValidationException extends RuntimeException
     }
 
     /**
-     * @return array|string|null
+     * @return null|array|string
      */
     public function getErrors()
     {

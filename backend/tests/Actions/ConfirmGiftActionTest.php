@@ -2,18 +2,16 @@
 
 namespace Tests\Actions;
 
-use Tests\Traits\AppTestTrait;
-use Tests\TestCase;
 use App\Enums\DeliveryStatus;
-use App\Models\{
-    Gift,
-    User,
-    Good,
-    GoodsStore,
-    Delivery,
-    Settings,
-    Transaction
-};
+use App\Models\Delivery;
+use App\Models\Gift;
+use App\Models\Good;
+use App\Models\GoodsStore;
+use App\Models\Settings;
+use App\Models\Transaction;
+use App\Models\User;
+use Tests\TestCase;
+use Tests\Traits\AppTestTrait;
 
 final class ConfirmGiftActionTest extends TestCase
 {
@@ -50,13 +48,14 @@ final class ConfirmGiftActionTest extends TestCase
             ['user_id', $userId],
             ['status', DeliveryStatus::SENDING],
         ])
-            ->exists();
+            ->exists()
+        ;
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertNull(json_decode($response->getBody()));
-        $this->assertSame(1, $updatedGift->confirmed);
-        $this->assertSame($quantityOld - 1, $quantityNew);
-        $this->assertTrue($deliveryExists);
+        self::assertSame(200, $response->getStatusCode());
+        self::assertNull(\json_decode($response->getBody()));
+        self::assertSame(1, $updatedGift->confirmed);
+        self::assertSame($quantityOld - 1, $quantityNew);
+        self::assertTrue($deliveryExists);
     }
 
     public function testConfirmGiftCacheAction(): void
@@ -88,13 +87,14 @@ final class ConfirmGiftActionTest extends TestCase
             ['amount', $gift->amount],
             ['user_id', $userId],
         ])
-            ->exists();
+            ->exists()
+        ;
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertNull(json_decode($response->getBody()));
-        $this->assertSame(1, $updatedGift->confirmed);
-        $this->assertSame($balanceOld - $gift->amount, $balanceNew);
-        $this->assertTrue($transactionExists);
+        self::assertSame(200, $response->getStatusCode());
+        self::assertNull(\json_decode($response->getBody()));
+        self::assertSame(1, $updatedGift->confirmed);
+        self::assertSame($balanceOld - $gift->amount, $balanceNew);
+        self::assertTrue($transactionExists);
     }
 
     public function testConfirmGiftPointsAction(): void
@@ -123,9 +123,9 @@ final class ConfirmGiftActionTest extends TestCase
 
         $updatedGift = Gift::whereId($gift->id)->first();
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertNull(json_decode($response->getBody()));
-        $this->assertSame(1, $updatedGift->confirmed);
-        $this->assertSame($balanceOld + $gift->points, $balanceNew);
+        self::assertSame(200, $response->getStatusCode());
+        self::assertNull(\json_decode($response->getBody()));
+        self::assertSame(1, $updatedGift->confirmed);
+        self::assertSame($balanceOld + $gift->points, $balanceNew);
     }
 }

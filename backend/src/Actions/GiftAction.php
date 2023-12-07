@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use Psr\Http\Message\ResponseInterface as Response;
-use App\Models\Gift;
-use App\Interfaces\GiftInterface;
+use App\Exception\ValidationException;
 use App\Factory\GiftFactory;
+use App\Interfaces\GiftInterface;
+use App\Models\Gift;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class GiftAction extends Action
 {
@@ -15,10 +16,11 @@ class GiftAction extends Action
     {
         if ($gift = Gift::firstWhere([['user_id', $this->uid]])) {
             if ($gift->confirmed) {
-                throw new \App\Exception\ValidationException(null, 'User already have a gift');
-            } else {
-                return $this->respond($gift->toArray());
+                throw new ValidationException(null, 'User already has a gift');
             }
+
+            return $this->respond($gift->toArray());
+
         }
 
         $attributes = ['user_id' => $this->uid];
@@ -36,6 +38,7 @@ class GiftAction extends Action
     protected function getType(): GiftInterface
     {
         $factory = new GiftFactory();
+
         return $factory->getRandomGift();
     }
 }

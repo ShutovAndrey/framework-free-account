@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\DB;
 
-use Illuminate\Database\Capsule\Manager as Capsule;
 use App\Models\{GoodsStore, User, Good};
 use Composer\Script\Event;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class MigrationAction
 {
@@ -14,7 +14,7 @@ class MigrationAction
     {
         if (empty($event->getArguments())) {
             $test = false;
-        } elseif (isset($event->getArguments()[0]) && $event->getArguments()[0] == 'test') {
+        } elseif (isset($event->getArguments()[0]) && 'test' == $event->getArguments()[0]) {
             $test = true;
         }
 
@@ -84,7 +84,7 @@ class MigrationAction
             $table->timestamps();
         });
 
-        //for flexible admin configuration
+        // for flexible admin configuration
         $eloquent::schema()->create('settings', static function ($table) {
             $table->integer('points_max')->unsigned();
             $table->integer('cache_max')->unsigned();
@@ -94,13 +94,13 @@ class MigrationAction
 
         echo 'Table created successfully!' . PHP_EOL;
 
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 5; ++$i) {
             $user = new User();
             $user->name = "user$i";
             $user->email = "user$i@user.com";
             $user->address = "street $i";
             $user->bank_account = "{$i}000123456789000{$i}";
-            $user->password = password_hash("qwerty$i", PASSWORD_BCRYPT);
+            $user->password = \password_hash("qwerty$i", PASSWORD_BCRYPT);
             $user->save();
         }
 
@@ -108,7 +108,7 @@ class MigrationAction
         foreach ($goods as $i => $gift) {
             $good = new Good();
             $good->name = $gift;
-            $good->gift = $gift == 'flat' ? false : true;
+            $good->gift = 'flat' == $gift ? false : true;
             $good->save();
 
             $store = new GoodsStore();
@@ -128,17 +128,17 @@ class MigrationAction
     public static function getDB(bool $test = false)
     {
         require __DIR__ . '/../../vendor/autoload.php';
-        $dotenv = \Dotenv\Dotenv::createUnsafeImmutable(dirname(__DIR__) . '/..');
+        $dotenv = \Dotenv\Dotenv::createUnsafeImmutable(\dirname(__DIR__) . '/..');
         $dotenv->load();
 
         $eloquent = new Capsule();
         $eloquent->addConnection([
-            'driver'    => 'mysql',
-            'host'      => getenv('DB_HOST'),
-            'port'      => getenv('DB_PORT'),
-            'database'  => $test ? getenv('DB_TEST_NAME') : getenv('DB_NAME'),
-            'username'  => getenv('DB_USER'),
-            'password'  => getenv('DB_PASS'),
+            'driver' => 'mysql',
+            'host' => \getenv('DB_HOST'),
+            'port' => \getenv('DB_PORT'),
+            'database' => $test ? \getenv('DB_TEST_NAME') : \getenv('DB_NAME'),
+            'username' => \getenv('DB_USER'),
+            'password' => \getenv('DB_PASS'),
             'unix_socket' => '',
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',

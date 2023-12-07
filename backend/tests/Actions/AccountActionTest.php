@@ -2,9 +2,9 @@
 
 namespace Tests\Actions;
 
+use Tests\TestCase;
 use Tests\Traits\AppTestTrait;
 use Tests\Traits\MockTrait;
-use Tests\TestCase;
 
 final class AccountActionTest extends TestCase
 {
@@ -20,8 +20,9 @@ final class AccountActionTest extends TestCase
      *
      * @param array $expected The expected result
      *
-     * @return void
      * @throws \JsonException
+     *
+     * @return void
      */
     public function testAccountAction(array $expected): void
     {
@@ -29,7 +30,7 @@ final class AccountActionTest extends TestCase
 
         $response = $this->app->handle($request);
 
-        $this->assertSame(200, $response->getStatusCode());
+        self::assertSame(200, $response->getStatusCode());
         $this->assertJsonData($expected, $response);
     }
 

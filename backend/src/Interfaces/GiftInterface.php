@@ -6,6 +6,7 @@ namespace App\Interfaces;
 
 interface GiftInterface
 {
-    public function getAttributes(): array;
     public static function isAvailable(): bool;
+
+    public function getAttributes(): array;
 }

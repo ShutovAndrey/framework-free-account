@@ -9,16 +9,16 @@ use App\Interfaces\GiftInterface;
 
 class CacheGift extends Gift implements GiftInterface
 {
+    public static function isAvailable(): bool
+    {
+        return Settings::whereColumn('cache_fund', '>=', 'cache_max')->exists();
+    }
+
     public function getAttributes(): array
     {
         return [
             'type' => GiftType::CACHE->value,
-            'amount' => rand(0, (Settings::first('cache_max')->cache_max)),
+            'amount' => \mt_rand(0, Settings::first('cache_max')->cache_max),
         ];
-    }
-
-    public static function isAvailable(): bool
-    {
-        return Settings::whereColumn('cache_fund', '>=', 'cache_max')->exists();
     }
 }

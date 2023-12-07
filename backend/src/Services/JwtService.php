@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use Firebase\JWT\{ExpiredException, Key, JWT};
-use UnexpectedValueException;
-use DomainException;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 
 class JwtService
 {
     private int $lifetime;
+
     private string $key;
 
     public function __construct(array $settings)
@@ -25,7 +26,7 @@ class JwtService
             $this->lifetime = $lifetime;
         }
 
-        $expiresOn = time() + $this->lifetime;
+        $expiresOn = \time() + $this->lifetime;
         $payload += ['exp' => $expiresOn];
 
         return JWT::encode($payload, $this->key, 'HS256');
@@ -42,13 +43,10 @@ class JwtService
 
         try {
             $this->_tokenDecoded = (array) JWT::decode($accessToken, $key);
-        } catch (ExpiredException $e) {
-            return false;
-        } catch (UnexpectedValueException $e) {
-            return false;
-        } catch (DomainException $e) {
+        } catch (ExpiredException|\UnexpectedValueException|\DomainException $e) {
             return false;
         }
+
         return true;
     }
 }

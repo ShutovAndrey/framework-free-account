@@ -2,13 +2,11 @@
 
 namespace Tests\Actions;
 
-use Tests\Traits\AppTestTrait;
-use Tests\TestCase;
 use App\Enums\GiftType;
-use App\Models\{
-    Gift,
-    User,
-};
+use App\Models\Gift;
+use App\Models\User;
+use Tests\TestCase;
+use Tests\Traits\AppTestTrait;
 
 final class ConvertGiftActionTest extends TestCase
 {
@@ -22,7 +20,7 @@ final class ConvertGiftActionTest extends TestCase
         $user->address = 'test3 str';
         $user->bank_account = '1234567';
         $user->rate = 0.7;
-        $user->password = password_hash('test3', PASSWORD_BCRYPT);
+        $user->password = \password_hash('test3', PASSWORD_BCRYPT);
         $user->save();
 
         $userId = $user->id;
@@ -42,11 +40,11 @@ final class ConvertGiftActionTest extends TestCase
         $oldGift = Gift::whereId($gift->id)->first();
         $newGift = Gift::where([['user_id', $userId], ['type', GiftType::POINTS->value], ['confirmed', true]])->first();
 
-        $points = (int) round($gift->amount * $user->rate);
+        $points = (int) \round($gift->amount * $user->rate);
 
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertSame($points, $newGift->points);
-        $this->assertNull($oldGift);
-        $this->assertNotNull($newGift);
+        self::assertSame(200, $response->getStatusCode());
+        self::assertSame($points, $newGift->points);
+        self::assertNull($oldGift);
+        self::assertNotNull($newGift);
     }
 }

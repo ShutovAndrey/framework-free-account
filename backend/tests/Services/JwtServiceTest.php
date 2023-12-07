@@ -2,11 +2,11 @@
 
 namespace Tests\Services;
 
+use App\Services\JwtService;
 use DI\DependencyException;
 use DI\NotFoundException;
-use Tests\Traits\AppTestTrait;
 use Tests\TestCase;
-use App\Services\JwtService;
+use Tests\Traits\AppTestTrait;
 
 final class JwtServiceTest extends TestCase
 {
@@ -26,7 +26,7 @@ final class JwtServiceTest extends TestCase
         $jwt = $this->container->get(JwtService::class);
         $token = $jwt->createJwt($payload);
 
-        $this->assertSame($token, $this->getToken(8));
-        $this->assertTrue($jwt->validateToken($this->getToken(8)));
+        self::assertSame($token, $this->getToken(8));
+        self::assertTrue($jwt->validateToken($this->getToken(8)));
     }
 }

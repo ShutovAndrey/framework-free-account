@@ -4,21 +4,24 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\HandlerStack;
-use GuzzleHttp\RequestOptions;
-use GuzzleHttp\Handler\CurlHandler;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use App\Factory\LoggerFactory;
 use App\Models\PaymentData;
 use App\Models\Transaction;
-use App\Factory\LoggerFactory;
+use GuzzleHttp\Client;
+use GuzzleHttp\Handler\CurlHandler;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\RequestOptions;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 class PaymentService
 {
-    private Client $http;
-    private array $config;
     protected Capsule $db;
+
     protected \Psr\Log\LoggerInterface $logger;
+
+    private Client $http;
+
+    private array $config;
 
     public function __construct(
         Capsule $db,
@@ -41,10 +44,10 @@ class PaymentService
             'account' => $data->bankAccout,
         ]);
 
-        $body = json_decode((string) $response->getBody(), true);
+        $body = \json_decode((string) $response->getBody(), true);
 
-        if ($response->getStatusCode() === 200) {
-            if ($body && $uuid = substr($body['headers']['X-Amzn-Trace-Id'], 7, 36)) {
+        if (200 === $response->getStatusCode()) {
+            if ($body && $uuid = \mb_substr($body['headers']['X-Amzn-Trace-Id'], 7, 36)) {
                 $transaction = new Transaction();
                 $transaction->user_id = $data->userId;
                 $transaction->uuid = $uuid;
