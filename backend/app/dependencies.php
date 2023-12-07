@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Factory\GiftProcessorFactory;
+use App\Services\GiftProcessor\CacheGiftProcessor;
 use DI\ContainerBuilder;
 use App\Services\JwtService;
 use App\Services\PaymentService;
@@ -42,6 +44,9 @@ return static fn (ContainerBuilder $containerBuilder, $test = false) =>
         LoggerFactory::class => static fn (ContainerInterface $container) =>
              new LoggerFactory($container->get('settings')['logger']),
 
+        GiftProcessorFactory::class => static fn (ContainerInterface $container)=>
+            new GiftProcessorFactory($container->get(PaymentService::class)),
+
         GiftAction::class => static fn (ContainerInterface $container) =>
              new GiftAction(
                 new Response(),
@@ -63,7 +68,7 @@ return static fn (ContainerBuilder $containerBuilder, $test = false) =>
              new ConfirmGiftAction(
                 new Response(),
                 $container->get(Capsule::class),
-                $container->get(PaymentService::class)
+                $container->get(GiftProcessorFactory::class)
             ),
 
         TokenCreateAction::class => static fn (ContainerInterface $container) =>

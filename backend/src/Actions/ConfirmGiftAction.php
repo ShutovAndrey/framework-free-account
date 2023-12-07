@@ -4,88 +4,51 @@ declare(strict_types=1);
 
 namespace App\Actions;
 
-use Psr\Http\Message\ResponseInterface as Response;
+use App\Exception\UnauthenticatedException;
+use App\Exception\ValidationException;
+use App\Factory\GiftProcessorFactory;
+use App\Models\Gift;
+use App\Models\User;
 use Illuminate\Database\Capsule\Manager as Capsule;
-use App\Services\PaymentService;
-use App\Models\{
-    User,
-    GoodsStore,
-    Delivery,
-    Gift,
-    PaymentData
-};
-use App\Enums\{GiftType, DeliveryStatus};
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class ConfirmGiftAction extends Action
 {
     protected Response $response;
-    protected Capsule $db;
-    protected PaymentService$payment;
-    protected User $user;
 
-    public function __construct(Response $response, Capsule $db, PaymentService $payment)
+    protected Capsule $db;
+
+    protected GiftProcessorFactory $giftFactory;
+
+    public function __construct(Response $response, Capsule $db, GiftProcessorFactory $giftFactory)
     {
         parent::__construct($response, $db);
-        $this->payment = $payment;
+        $this->giftFactory = $giftFactory;
     }
 
+    /**
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     */
     protected function action(): Response
     {
-        $id = (int) $this->getAttribute('id');
-
-        if (!$id) {
-            throw new \App\Exception\ValidationException('Please provide a valid gift id');
+        if (!$id = (int) $this->getAttribute('id')) {
+            throw new ValidationException('Please provide a valid gift id');
         }
-
+        /** @var Gift $gift */
         $gift = Gift::firstWhere('id', $id);
 
         if (empty($gift)) {
-            throw new \App\Exception\UnauthenticatedException();
+            throw new UnauthenticatedException();
         }
 
         $gift->update(['confirmed' => true]);
-
-        $this->user = User::firstWhere('id', $this->uid);
-        $this->processGift($gift);
+        if (null !== $user = User::firstWhere('id', $this->uid)) {
+            $this->giftFactory->getProcessor($gift->type)->process($user, $gift);
+        }
 
         return $this->respond();
-    }
-
-    protected function processGift(Gift $gift): void
-    {
-        match (GiftType::from($gift->type)) {
-            GiftType::CACHE =>  $this->processPayment($gift),
-            GiftType::GOOD =>  $this->processPost($gift),
-            GiftType::POINTS => $this->processPoints($gift),
-        };
-    }
-
-    protected function processPayment(Gift $gift): void
-    {
-        $this->payment->create(new PaymentData(
-            $this->user->id,
-            $gift->id,
-            $gift->amount,
-            $this->user->bank_account
-        ));
-    }
-
-    protected function processPost(Gift $gift): void
-    {
-        $store = GoodsStore::firstWhere('good_id', $gift->good_id);
-        $store->decrement('quantity');
-
-        $delivery = new Delivery();
-        $delivery->good_id = $gift->good_id;
-        $delivery->user_id = $gift->user_id;
-        $delivery->address = $this->user->address;
-        $delivery->status = DeliveryStatus::SENDING;
-        $delivery->save();
-    }
-
-    protected function processPoints(Gift $gift): void
-    {
-        $user = User::firstWhere('id', $this->uid);
-        $user->update(['points' => $user->points + $gift->points]);
     }
 }
