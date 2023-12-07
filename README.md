@@ -18,35 +18,10 @@ Simple PHP + MYSQL + VueJS based dockerized application
 
 # Getting started
 
-To run project manually:
-
-Create your "giftdb" MYSQL database. then:
-
-```
-cd backend
-composer install
-composer up
-composer migrate-and-seed
-composer start
-
-cd ../frontend
-yarn (or npm install)
-yarn serve (or npm run serve)
-
-```
+To run project just use command
+`make app-up`
 
 You can go to your http://localhost:3333/ and have a fun
-
-Or just running via docker compose:
-
-```
-cd backend
-docker compose up --build -d
-docker exec backend composer migrate-and-seed
-
-```
-
-And go to http://0.0.0.0
 
 ---
 
