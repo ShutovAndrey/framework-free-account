@@ -1,5 +1,8 @@
 {
   "name": "shutov/gift-shop",
+  "description": "some simple project",
+  "license": "proprietary",
+  "type": "project",
   "autoload": {
       "psr-4": {
           "App\\": "src/"
